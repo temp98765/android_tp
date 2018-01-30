@@ -18,6 +18,13 @@ public class UserStorage {
         editor.apply();
     }
 
+    public static void logOff(Context context) {
+        SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(context).edit();
+        editor.putString(USER_NAME, null);
+        editor.putString(USER_EMAIL, null);
+        editor.apply();
+    }
+
     public static User getUserInfo(Context context) {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         return new User(sharedPreferences.getString(USER_NAME, null), sharedPreferences.getString(USER_EMAIL, null));

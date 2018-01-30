@@ -6,6 +6,9 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -21,6 +24,7 @@ import java.util.List;
 
 import static com.example.amiotj.tp0.UserStorage.getUserInfo;
 import static com.example.amiotj.tp0.UserStorage.isUserLoggedIn;
+import static com.example.amiotj.tp0.UserStorage.logOff;
 
 
 public class MainActivity extends AppCompatActivity implements ValueEventListener {
@@ -103,4 +107,30 @@ public class MainActivity extends AppCompatActivity implements ValueEventListene
     public void onCancelled(DatabaseError databaseError) {
 
     }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.logoffItem:
+               handle_logoff();
+                return true;
+        }
+        return false;
+    }
+
+    private void handle_logoff() {
+        logOff(this);
+        Intent intent = new Intent(this, NamePickerActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.main_activity_menu, menu);
+        return true;
+    }
+
+
 }
