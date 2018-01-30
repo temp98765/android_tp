@@ -1,5 +1,6 @@
 package com.example.amiotj.tp0;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -18,6 +19,9 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.example.amiotj.tp0.UserStorage.getUserInfo;
+import static com.example.amiotj.tp0.UserStorage.isUserLoggedIn;
+
 
 public class MainActivity extends AppCompatActivity implements ValueEventListener {
 
@@ -30,6 +34,13 @@ public class MainActivity extends AppCompatActivity implements ValueEventListene
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if (!isUserLoggedIn(this)) {
+            Intent intent = new Intent(this, NamePickerActivity.class);
+            startActivity(intent);
+            finish();
+        }
+
         setContentView(R.layout.activity_main);
 
         RecyclerView recyclerView = findViewById(R.id.recyclerView);
@@ -38,11 +49,7 @@ public class MainActivity extends AppCompatActivity implements ValueEventListene
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(!inputEditText.getText().toString().isEmpty()) {
-                    DatabaseReference newData = databaseReference.push();
-                    newData.setValue(new Message(inputEditText.getText().toString(), "Fabrice Jacque", 0L));
-                    inputEditText.setText("");
-                }
+                handleSendMessage();
             }
         });
 
@@ -53,6 +60,17 @@ public class MainActivity extends AppCompatActivity implements ValueEventListene
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         databaseReference = database.getReference("chat/messages");
         databaseReference.addValueEventListener(this);
+    }
+
+    private void handleSendMessage() {
+        if (!inputEditText.toString().isEmpty()) {
+            User user = UserStorage.getUserInfo(this);
+            assert(user.name != null);
+            assert(user.email != null);
+            DatabaseReference newData = databaseReference.push();
+            newData.setValue(new Message(inputEditText.getText().toString(), user.name, 0L));
+            inputEditText.setText("");
+        }
     }
 
     @Override
