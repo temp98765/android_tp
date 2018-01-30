@@ -8,6 +8,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.util.concurrent.TimeUnit;
+
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 
@@ -47,19 +49,23 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
     class ViewHolder extends RecyclerView.ViewHolder {
 
         private final TextView userText;
+        private final TextView timeText;
         private final TextView contentText;
-        private ImageView userImage;
+        private final ImageView userImage;
 
         ViewHolder(View itemView) {
             super(itemView);
             userText = itemView.findViewById(R.id.userText);
             contentText = itemView.findViewById(R.id.contentText);
             userImage = itemView.findViewById(R.id.userImage);
+            timeText = itemView.findViewById(R.id.timeText);
         }
 
         void setData(Message message) {
-            userText.setText(message.userName + ": ");
+            userText.setText(message.userName + " ");
             contentText.setText(message.content);
+            //timeText.setText("(" + (TimeUnit.SECONDS.toHours(System.currentTimeMillis() / 1000 - message.timestamp) + " hours ago" + ")"));
+            timeText.setText("(" + (TimeUnit.SECONDS.toMinutes(System.currentTimeMillis() / 1000 - message.timestamp) + " minutes ago" + ")"));
             if (message.userEmail != null && !message.userEmail.isEmpty()) {
                 Glide.with(userImage.getContext())
                         .load("https://www.gravatar.com/avatar/" + Utils.md5(message.userEmail))

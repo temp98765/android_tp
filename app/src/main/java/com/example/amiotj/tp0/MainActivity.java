@@ -71,7 +71,7 @@ public class MainActivity extends AppCompatActivity implements ValueEventListene
             assert(user.name != null);
             assert(user.email != null);
             DatabaseReference newData = databaseReference.push();
-            newData.setValue(new Message(inputEditText.getText().toString(), user.name, user.email, 0L));
+            newData.setValue(new Message(inputEditText.getText().toString(), user.name, user.email, System.currentTimeMillis() / 1000));
             inputEditText.setText("");
         }
     }
