@@ -55,7 +55,10 @@ public class MainActivity extends AppCompatActivity implements ValueEventListene
 
         messageAdapter = new MessageAdapter(new ArrayList<Message>());
         recyclerView.setAdapter(messageAdapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        linearLayoutManager.setStackFromEnd(true);
+        recyclerView.setLayoutManager(linearLayoutManager);
 
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         databaseReference = database.getReference("chat/messages");
